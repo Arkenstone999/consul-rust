@@ -35,13 +35,18 @@ pub fn get_vec<R: DeserializeOwned>(
     if let Some(dc) = datacenter {
         params.insert(String::from("dc"), dc.to_owned());
     }
+    let wait_time = options
+        .and_then(|o| o.wait_time)
+        .or(config.wait_time);
+
     if let Some(options) = options {
         if let Some(index) = options.wait_index {
             params.insert(String::from("index"), index.to_string());
         }
-        if let Some(wait_time) = options.wait_time {
-            params.insert(String::from("wait"), format!("{}s", wait_time.as_secs()));
-        }
+    }
+
+    if let Some(wait_time) = wait_time {
+        params.insert(String::from("wait"), format!("{}s", wait_time.as_secs()));
     }
 
     let url_str = format!("{}{}", config.address, path);
@@ -99,13 +104,18 @@ pub fn get<R: DeserializeOwned>(
     if let Some(dc) = datacenter {
         params.insert(String::from("dc"), dc.to_owned());
     }
+    let wait_time = options
+        .and_then(|o| o.wait_time)
+        .or(config.wait_time);
+
     if let Some(options) = options {
         if let Some(index) = options.wait_index {
             params.insert(String::from("index"), index.to_string());
         }
-        if let Some(wait_time) = options.wait_time {
-            params.insert(String::from("wait"), format!("{}s", wait_time.as_secs()));
-        }
+    }
+
+    if let Some(wait_time) = wait_time {
+        params.insert(String::from("wait"), format!("{}s", wait_time.as_secs()));
     }
 
     let url_str = format!("{}{}", config.address, path);
